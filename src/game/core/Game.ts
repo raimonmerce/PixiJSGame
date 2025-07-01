@@ -5,10 +5,12 @@ import Controller from './Controller';
 export class Game {
   app: Application;
   controller: Controller;
+  scene: Scene;
 
   constructor() {
     this.app = new Application();
     this.controller = new Controller();
+    this.scene = new Scene(this.controller);
   }
 
   async init(containerRef: HTMLDivElement) {
@@ -19,10 +21,9 @@ export class Game {
 
     containerRef.appendChild(this.app.view as HTMLCanvasElement);
 
-    const scene = new Scene(this.controller);
-    this.app.stage.addChild(scene);
+    this.app.stage.addChild(this.scene);
         this.app.ticker.add((delta) => {
-            scene.update(delta.deltaMS);
+            this.scene.update(delta.deltaMS);
         });
     }
 }

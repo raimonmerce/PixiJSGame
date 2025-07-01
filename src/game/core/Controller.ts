@@ -44,14 +44,11 @@ export default class Controller {
 
     if (!key.pressed && now - key.timestamp < this.doubleTapThreshold) {
       key.doubleTap = true;
-          console.log(dir , " double tap")
-
     } else {
       key.doubleTap = false;
     }
 
     key.pressed = true;
-    console.log(dir , " down")
     key.timestamp = now;
   }
 
