@@ -1,5 +1,4 @@
 import { AnimatedSprite, Sprite } from 'pixi.js';
-
 export default abstract class GameObject {
   sprite: Sprite | AnimatedSprite;
   private _x: number;
@@ -9,8 +8,8 @@ export default abstract class GameObject {
     this.sprite = sprite;
     this._x = x;
     this._y = y;
-    this.sprite.x = x;
-    this.sprite.y = y;
+    sprite.x = x - sprite.width / 2;
+    sprite.y = y - sprite.height / 2;
   }
 
   update(delta: number): void {
@@ -34,5 +33,14 @@ export default abstract class GameObject {
     this._y = y;
     this.sprite.x = x;
     this.sprite.y = y;
+  }
+
+  destroy(): void {
+
+    if (this.sprite.parent) {
+      this.sprite.parent.removeChild(this.sprite);
+    }
+
+    this.sprite.destroy({ texture: true, textureSource: true });
   }
 }

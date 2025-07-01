@@ -1,9 +1,11 @@
 import Character from "./CharacterBase";
 import { AnimatedSprite, Sprite } from 'pixi.js';
 export class Enemy extends Character {
+  name: string;
 
-  constructor(sprite: Sprite | AnimatedSprite, x = 0, y = 0) {
-    super(sprite, 50, 5, 0.3, x, y);
+  constructor(sprite: Sprite | AnimatedSprite, x = 0, y = 0, name: string) {
+    super(sprite, 100, 5, 0.3, x, y);
+    this.name = name;
   }
 
   update(delta: number): void {
@@ -20,5 +22,5 @@ export class Enemy extends Character {
     const newY = this.y + normY * this.speed * delta;
 
     this.setPosition(newX, newY);
-    }
+  }
 }

@@ -5,23 +5,36 @@ import WeaponBase from "../weapon/WeaponBase";
 
 export class Player extends Character {
   controller: Controller;
-  weapon?: WeaponBase;
+  private weapon?: WeaponBase;
   
   constructor(sprite: Sprite | AnimatedSprite, controller: Controller, x = 0, y = 0) {
-    super(sprite, 50, 5, 0.5, x, y);
+    super(sprite, 100, 5, 0.5, x, y);
     this.controller = controller;
   }
 
   equipWeapon(weapon: WeaponBase): void {
     this.weapon = weapon;
+    this.weapon.sprite.x = 0;
+    this.weapon.sprite.y = 0;
+    this.weapon.sprite.scale = 0.75;
+    this.weapon.sprite.scale = 0.75;
+    this.weapon.attachedWeapon();
+    this.sprite.addChild(this.weapon.sprite) 
   }
 
   unequipWeapon(): void {
     this.weapon = undefined;
   }
 
+  hasWeapon(): boolean {
+    return this.weapon !== undefined;
+  }
+
+  getWeapon(): WeaponBase | null {
+    return this.weapon ?? null;
+  }
+
   getAttackPower(): number {
-    // You can decide how to combine base attack + weapon attack
     return this.attack + (this.weapon ? this.weapon.attack : 0);
   }
 
