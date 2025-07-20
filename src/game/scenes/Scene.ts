@@ -137,13 +137,27 @@ export class Scene extends Container {
   update(delta: number): void {
     if (!this.player) return;
     this.player?.update(delta);
+
     let newX = this.x;
     let newY = this.y;
 
-    if (this.controller.isPressed('up')) newY += this.player.speed * delta;
-    if (this.controller.isPressed('down')) newY -= this.player.speed * delta;
-    if (this.controller.isPressed('left')) newX += this.player.speed * delta;
-    if (this.controller.isPressed('right')) newX -= this.player.speed * delta;
+    let dx = 0;
+    let dy = 0;
+
+    if (this.controller.isPressed('up')) dy += 1;
+    if (this.controller.isPressed('down')) dy -= 1;
+    if (this.controller.isPressed('left')) dx += 1;
+    if (this.controller.isPressed('right')) dx -= 1;
+
+    const length = Math.hypot(dx, dy);
+
+    if (length > 0) {
+        dx /= length;
+        dy /= length;
+    }
+
+    newX += dx * this.player.speed * delta;
+    newY += dy * this.player.speed * delta;
 
     this.floor.addPosition(newX, newY)
     for (let i = this.enemies.length - 1; i >= 0; i--) {
