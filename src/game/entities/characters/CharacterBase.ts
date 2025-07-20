@@ -1,5 +1,5 @@
 import GameObject from "../../core/GameObject";
-import { HealthBar } from "../ui/healthBar";
+import { HealthBar } from "../ui/HealthBar";
 import type{ CharacterStats } from "../../../types";
 export default abstract class CharacterBase extends GameObject {
   health: number;
@@ -14,7 +14,9 @@ export default abstract class CharacterBase extends GameObject {
     this.maxHealth = maxHealth;
     this.attack = attack;
     this.speed = speed;
-    this.healthBar = new HealthBar(maxHealth);
+    this.healthBar = new HealthBar(maxHealth, this.sprite.width);
+    this.healthBar.x = -this.sprite.width/2;
+    this.healthBar.y = -this.sprite.height/2 - 10;
     this.sprite.addChild(this.healthBar);
   }
 
