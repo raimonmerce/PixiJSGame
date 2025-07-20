@@ -1,16 +1,22 @@
-import { AnimatedSprite, Sprite } from 'pixi.js';
+import { AnimatedSprite, Sprite, TilingSprite } from 'pixi.js';
 import type { GameObjectOptions } from '../../types';
 export default abstract class GameObject {
-  sprite: Sprite | AnimatedSprite;
+  sprite: Sprite | AnimatedSprite | TilingSprite;
   private _x: number;
   private _y: number;
 
-  constructor({sprite, x = 0, y = 0}: GameObjectOptions) {
+  constructor({ sprite, x = 0, y = 0 }: GameObjectOptions) {
     this.sprite = sprite;
+
+    if ('anchor' in sprite) {
+      sprite.anchor.set(0.5);
+    }
+
     this._x = x;
     this._y = y;
-    sprite.x = x - sprite.width / 2;
-    sprite.y = y - sprite.height / 2;
+
+    sprite.x = x;
+    sprite.y = y;
   }
 
   update(delta: number): void {
@@ -34,6 +40,13 @@ export default abstract class GameObject {
     this._y = y;
     this.sprite.x = x;
     this.sprite.y = y;
+  }
+
+  addPosition(x: number, y: number): void {
+    this._x += x;
+    this._y += y;
+    this.sprite.x += x;
+    this.sprite.y += y;
   }
 
   destroy(): void {

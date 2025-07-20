@@ -8,15 +8,14 @@ export class HealthBar extends Container {
     private widthPerHealth: number;
     private barHeight = 5;
 
-    constructor(maxHealth: number, x = 0, y = 0) {
+    constructor(maxHealth: number, healthbarWidth: number) {
         super();
 
         this.maxHealth = maxHealth;
         this.currentHealth = maxHealth;
         this.widthPerHealth = 1;
 
-        const totalWidth = maxHealth * this.widthPerHealth;
-
+        const totalWidth = healthbarWidth;
         this.background = new Graphics();
         this.background.rect(0, 0, totalWidth, this.barHeight)
         .fill({
@@ -30,9 +29,6 @@ export class HealthBar extends Container {
             color: 0xff0000,
         })
         this.addChild(this.foreground);
-
-        this.x = x;
-        this.y = y;
     }
 
     takeDamage(amount: number): void {

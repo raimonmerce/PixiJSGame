@@ -8,19 +8,22 @@ export class Enemy extends Character {
     this.name = name;
   }
 
-  update(delta: number): void {
-    super.update(delta);
+update(delta: number): void {
+  super.update(delta);
 
-    const randomDirectionX = (Math.random() * 2) - 1;
-    const randomDirectionY = (Math.random() * 2) - 1;
+  const centerX = window.innerWidth / 2;
+  const centerY = window.innerHeight / 2;
 
-    const length = Math.sqrt(randomDirectionX * randomDirectionX + randomDirectionY * randomDirectionY) || 1;
-    const normX = randomDirectionX / length;
-    const normY = randomDirectionY / length;
+  const dirX = centerX - this.x;
+  const dirY = centerY - this.y;
 
-    const newX = this.x + normX * this.speed * delta;
-    const newY = this.y + normY * this.speed * delta;
+  const length = Math.sqrt(dirX * dirX + dirY * dirY) || 1;
+  const normX = dirX / length;
+  const normY = dirY / length;
 
-    this.setPosition(newX, newY);
-  }
+  const newX = this.x + normX * this.speed * delta;
+  const newY = this.y + normY * this.speed * delta;
+
+  this.setPosition(newX, newY);
+}
 }

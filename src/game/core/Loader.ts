@@ -1,7 +1,7 @@
 import { Assets, Texture, Sprite, Spritesheet, AnimatedSprite } from 'pixi.js';
 export default class Loader {
   private static textures: Map<string, Texture> = new Map();
-  private static animations: Map<string, AnimatedSprite> = new Map();
+  private static animationFrames: Map<string, Texture[]> = new Map();
   private static assetPaths: Map<string, string> = new Map();
   static async preloadGroup(assetPaths: Record<string, string>): Promise<void> {
     try {
@@ -29,18 +29,8 @@ export default class Loader {
 
       for (const [key, path] of jsonEntries) {
         const sheet: Spritesheet = await Assets.load(path);
-        const frames: Texture[] = [];
-
-        for (const [_, texture] of Object.entries(sheet.textures)) {
-          frames.push(texture);
-        }
-
-        const anim = new AnimatedSprite(frames);
-        anim.animationSpeed = 0.1;
-        anim.loop = true;
-        anim.play();
-
-        this.animations.set(key, anim);
+        const frames: Texture[] = Object.values(sheet.textures);
+        this.animationFrames.set(key, frames);
       }
     } catch (error) {
       console.error("Error loading spritesheet(s):", error);
@@ -66,27 +56,31 @@ export default class Loader {
   }
 
   static async getAnimatedSprite(key: string): Promise<AnimatedSprite | undefined> {
-    if (this.animations.has(key)) {
-      return this.animations.get(key);
-    }
+  if (this.animationFrames.has(key)) {
+    const frames = this.animationFrames.get(key)!;
+    const anim = new AnimatedSprite(frames);
+    anim.animationSpeed = 0.1;
+    anim.loop = true;
+    anim.play();
+    return anim;
+  }
 
-    const path = `images/${key}/${key}.json`;
-    try {
-      const sheet: Spritesheet = await Assets.load(path);
-      const frames: Texture[] = Object.values(sheet.textures);
+  const path = `images/${key}/${key}.json`;
+  try {
+    const sheet: Spritesheet = await Assets.load(path);
+    const frames: Texture[] = Object.values(sheet.textures);
+    this.animationFrames.set(key, frames);
 
-      const anim = new AnimatedSprite(frames);
-      anim.animationSpeed = 0.1;
-      anim.loop = true;
-      anim.play();
-
-      this.animations.set(key, anim);
-      this.assetPaths.set(key, path);
-      return anim;
-    } catch (error) {
-      console.warn(`AnimatedSprite not found for key: ${key}`, error);
-      return undefined;
-    }
+    const anim = new AnimatedSprite(frames);
+    anim.animationSpeed = 0.1;
+    anim.loop = true;
+    anim.play();
+    this.assetPaths.set(key, path);
+    return anim;
+  } catch (error) {
+    console.warn(`AnimatedSprite not found for key: ${key}`, error);
+    return undefined;
+  }
   }
 
   static unloadAsset(key: string): void {
