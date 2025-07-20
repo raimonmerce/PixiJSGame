@@ -1,4 +1,4 @@
-import {  Container, Sprite, TilingSprite, Texture } from 'pixi.js';
+import {  Container, Sprite, TilingSprite, Texture, AnimatedSprite } from 'pixi.js';
 import { Player } from '../entities/characters/Player';
 import Controller from '../core/Controller';
 import Loader from '../core/Loader';
@@ -29,12 +29,13 @@ export class Scene extends Container {
       const enemyTexture = Loader.getTexture("images/enemy.png");
       const swordTexture = Loader.getTexture("images/sword.png");
       const tileTexture = Loader.getTexture("images/tile.png");
+      const animatedSpriteSheet = await Loader.preLoadSpritesheet();
 
       if (!playerTexture || !enemyTexture || !swordTexture || !tileTexture) {
         throw new Error("Missing textures after preload");
       }
       this.createFloor(tileTexture);
-      this.createEnemy(enemyTexture);
+      this.createEnemy(animatedSpriteSheet);
       this.createPlayer(playerTexture);
       this.createWeapon(swordTexture);
 
@@ -43,9 +44,7 @@ export class Scene extends Container {
     }
   }
 
-  private createPlayer(texture: Texture) {
-
-    const sprite = new Sprite(texture);
+  private createPlayer(sprite: Sprite| AnimatedSprite) {
     sprite.width = sprite.width * 2;
     sprite.height = sprite.height * 2;
 
@@ -53,8 +52,7 @@ export class Scene extends Container {
     this.addChild(this.player.sprite);
   }
 
-  private createEnemy(texture: Texture) {
-    const sprite = new Sprite(texture);
+  private createEnemy(sprite: Sprite| AnimatedSprite) {
     sprite.width = sprite.width * 2;
     sprite.height = sprite.height * 2;
 
@@ -63,19 +61,17 @@ export class Scene extends Container {
     this.addChild(enemy.sprite);
   }
 
-  private createWeapon(texture: Texture) {
-    const sprite = new Sprite(texture);
+  private createWeapon(sprite: Sprite) {
     sprite.width = sprite.width * 2;
     sprite.height = sprite.height * 2;
-
     const sword = new Sword(sprite, 500, 500);
     this.weapons.push(sword);
     this.addChild(sword.sprite);
   }
 
-  private createFloor(texture: Texture) {
+  private createFloor(sprite: Sprite) {
     const tilingBackground = new TilingSprite(
-      texture,
+      sprite.texture,
       window.innerWidth,
       window.innerHeight
     );

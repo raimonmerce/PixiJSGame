@@ -1,7 +1,8 @@
-import { Assets, Texture } from 'pixi.js';
+import { Assets, Texture, Sprite, Spritesheet, AnimatedSprite } from 'pixi.js';
 
 export default class Loader {
   private static textures: Map<string, Texture> = new Map();
+  private static animatedSprite: AnimatedSprite;
 
   // Define all asset paths here
   private static assetPaths: string[] = [
@@ -20,15 +21,42 @@ export default class Loader {
       loadedTextures.forEach((texture, i) => {
         this.textures.set(this.assetPaths[i], texture);
       });
+      this.preLoadSpritesheet()
 
-      console.log("All assets loaded");
     } catch (error) {
       console.error("Error loading assets", error);
       throw error;
     }
   }
 
-  static getTexture(path: string): Texture | undefined {
-    return this.textures.get(path);
+  static async preLoadSpritesheet(): Promise<AnimatedSprite> {
+    try {
+      const spritesheet: Spritesheet = await Assets.load('https://pixijs.com/assets/spritesheet/0123456789.json');
+      const texturesSpritesheet = [];
+
+      for (let i = 0; i < 10; i++) {
+        const framekey = `0123456789 ${i}.ase`;
+        const texture = Texture.from(framekey);
+        texturesSpritesheet.push(texture);
+      }
+
+      this.animatedSprite = new AnimatedSprite(texturesSpritesheet);
+      this.animatedSprite.animationSpeed = 1 / 10;
+      this.animatedSprite.loop = true;
+      this.animatedSprite.play();
+
+      return this.animatedSprite;
+    } catch (error) {
+      console.error("Error loading spritesheet", error);
+      throw error;
+    }
+  }
+
+  static getTexture(path: string): Sprite | undefined {
+    return new Sprite(this.textures.get(path));
+  }
+
+  static getAnimatedSprite(): AnimatedSprite | undefined{
+    return this.animatedSprite;
   }
 }

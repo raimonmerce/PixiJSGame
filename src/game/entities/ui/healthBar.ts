@@ -38,7 +38,6 @@ export class HealthBar extends Container {
     takeDamage(amount: number): void {
         this.currentHealth = Math.max(0, this.currentHealth - amount);
         this.updateBar();
-        console.log("A")
     }
 
     // Call this to heal
@@ -48,13 +47,11 @@ export class HealthBar extends Container {
     }
 
     private updateBar(): void {
-        console.log("B")
         const newWidth = (this.currentHealth / this.maxHealth) * this.maxHealth * this.widthPerHealth;
         this.foreground.clear();
         this.foreground.rect(0, 0, newWidth, this.barHeight)
         .fill({
             color: 0xff0000,
         })
-        console.log("C")
     }
 }
