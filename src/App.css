@@ -1,12 +1,20 @@
+@font-face {
+  font-family: 'Alagard';
+  src: url('/fonts/alagard.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 html,
 body {
   overflow: hidden;
+  font-family: 'Alagard', sans-serif;
 }
 
 .test {
   height: 100%;
   width: 100%;
   overflow: hidden;
-  scrollbar-width: none;          /* Firefox */
-  -ms-overflow-style: none;   
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }

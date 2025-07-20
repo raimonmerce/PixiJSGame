@@ -39,12 +39,8 @@ export class CharacterFactory {
                 console.error("Failed loading player texture");
                 return undefined;
             }
-
-            // const posX = Math.random() * window.innerWidth;
-            // const posY = Math.random() * window.innerHeight;
-
             return new Enemy({
-                name: "Carlos",
+                score: 10,
                 maxHealth: 50,
                 attack: 5,
                 speed: 0.15,
