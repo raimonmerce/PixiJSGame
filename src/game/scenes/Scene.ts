@@ -43,14 +43,44 @@ export class Scene extends Container {
         throw new Error('Missing required sprites after loading.');
       }
       this.createFloor(tileSprite);
-      this.createEnemy(200, 300);
-      this.createEnemy(100, 400);
       this.createPlayer();
       this.createWeapon(swordSprite);
+      this.startEnemySpawn();
 
     } catch (error) {
       console.error("Failed to initialize scene", error);
     }
+  }
+
+  private startEnemySpawn(): void {
+    setInterval(() => {
+      const spawnDistance = 60;
+      const side = Math.floor(Math.random() * 4); // 0 = top, 1 = right, 2 = bottom, 3 = left
+
+      let x = 0;
+      let y = 0;
+
+      switch (side) {
+        case 0: // top
+          x = Math.random() * window.innerWidth;
+          y = -spawnDistance;
+          break;
+        case 1: // right
+          x = window.innerWidth + spawnDistance;
+          y = Math.random() * window.innerHeight;
+          break;
+        case 2: // bottom
+          x = Math.random() * window.innerWidth;
+          y = window.innerHeight + spawnDistance;
+          break;
+        case 3: // left
+          x = -spawnDistance;
+          y = Math.random() * window.innerHeight;
+          break;
+      }
+
+      this.createEnemyAt(x, y);
+    }, 1000);
   }
 
   private async createPlayer() {
@@ -63,7 +93,7 @@ export class Scene extends Container {
     } 
   }
 
-  private async createEnemy(x = 0, y = 0) {
+  private async createEnemyAt(x = 0, y = 0) {
     try {
       const enemy = await CharacterFactory.createDefaultEnemy(x, y);
       if (!enemy) {
@@ -92,8 +122,8 @@ export class Scene extends Container {
   private createFloor(sprite: Sprite) {
     const tileSprite = new TilingSprite({
       texture: sprite.texture,
-      width: window.innerWidth,
-      height:  window.innerHeight
+      width: window.innerWidth * 10,
+      height:  window.innerHeight * 10
     });
     this.floor = new Floor({
       name: "test",
@@ -127,9 +157,10 @@ export class Scene extends Container {
       if (!enemy.isAlive()) {
         this.enemies.splice(i, 1);
         enemy.destroy();
+      } else {
+        enemy.addPosition(newX, newY)
+        enemy.update(delta)
       }
-      enemy.addPosition(newX, newY)
-      enemy.update(delta)
     }
 
     for (const weapon of this.weapons) {
