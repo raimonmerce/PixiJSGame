@@ -1,4 +1,4 @@
-import {  Container, Sprite, TilingSprite } from 'pixi.js';
+import { AnimatedSprite, Container, Point, Rectangle, Sprite, TilingSprite } from 'pixi.js';
 import { Player } from '../entities/characters/Player';
 import { Enemy } from '../entities/characters/Enemy';
 import { Sword } from '../entities/weapon/Sword';
@@ -163,9 +163,16 @@ export class Scene extends Container {
     for (let i = this.enemies.length - 1; i >= 0; i--) {
       const enemy = this.enemies[i];
       
-      if (this.player && this.checkCollision(this.player, enemy)) {
-        if(this.player.hasWeapon()) enemy.takeDamage(1)
-        else this.player.takeDamage(1);
+      if (this.player) {
+        if (this.checkCollision(this.player, enemy)) {
+          this.player.takeDamage(1);
+        }
+      }
+
+      for (const weapon of this.weapons) {
+        if (this.checkCollision(weapon, enemy)) {
+          enemy.takeDamage(weapon.attack);
+        }
       }
 
       if (!enemy.isAlive()) {
@@ -183,13 +190,34 @@ export class Scene extends Container {
         this.player.equipWeapon(weapon);
       }
 
-      if (!weapon.attached) weapon.addPosition(newX, newY)
+      if (!weapon.attached) weapon.addPosition(newX, newY);
     }
   }
 
+  private getSpriteGlobalBoundsWithoutChildren(sprite: Sprite | AnimatedSprite | TilingSprite): Rectangle {
+    const tex = sprite.texture;
+    const frame = tex.frame;
+
+    const w = frame.width * sprite.scale.x;
+    const h = frame.height * sprite.scale.y;
+    const ax = sprite.anchor?.x ?? 0;
+    const ay = sprite.anchor?.y ?? 0;
+
+    const topLeft = sprite.toGlobal(new Point(-ax * w, -ay * h));
+    const bottomRight = sprite.toGlobal(new Point((1 - ax) * w, (1 - ay) * h));
+
+    return new Rectangle(
+      topLeft.x,
+      topLeft.y,
+      bottomRight.x - topLeft.x,
+      bottomRight.y - topLeft.y
+    );
+  }
+
+
   private checkCollision(obj1: GameObject, obj2: GameObject): boolean {
-    const bounds1 = obj1.sprite.getBounds();
-    const bounds2 = obj2.sprite.getBounds();
+    const bounds1 = this.getSpriteGlobalBoundsWithoutChildren(obj1.sprite);
+    const bounds2 = this.getSpriteGlobalBoundsWithoutChildren(obj2.sprite);
 
     return bounds1.x < bounds2.x + bounds2.width &&
       bounds1.x + bounds1.width > bounds2.x &&

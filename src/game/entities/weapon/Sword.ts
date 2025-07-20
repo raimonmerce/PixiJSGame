@@ -28,7 +28,7 @@ export class Sword extends WeaponBase {
     update(delta: number): void {
         super.update(delta);
         if (this.attached) {
-            this.sprite.rotation += this.speed * delta;
+            // this.sprite.rotation += this.speed * delta;
         }
     }
 }
