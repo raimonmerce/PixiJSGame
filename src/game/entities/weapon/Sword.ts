@@ -7,6 +7,7 @@ export class Sword extends WeaponBase {
 
     constructor({...weaponOptions}: WeaponOptions) {
         super(weaponOptions);
+        this.sprite.anchor.set(0.5, 1.5);
     }
 
     attachedWeapon(): void {
@@ -26,6 +27,8 @@ export class Sword extends WeaponBase {
 
     update(delta: number): void {
         super.update(delta);
-        // this.sprite.rotation += 0.005 * delta;
+        if (this.attached) {
+            this.sprite.rotation += this.speed * delta;
+        }
     }
 }

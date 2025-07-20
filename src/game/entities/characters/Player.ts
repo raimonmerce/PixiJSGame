@@ -18,7 +18,7 @@ export class Player extends Character {
     this.weapon.sprite.scale = 0.75;
     this.weapon.sprite.scale = 0.75;
     this.weapon.attachedWeapon();
-    this.sprite.addChild(this.weapon.sprite) 
+    this.sprite.addChild(this.weapon.sprite);
   }
 
   unequipWeapon(): void {
