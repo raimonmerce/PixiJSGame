@@ -80,7 +80,7 @@ export class Scene extends Container {
   private createWeapon(sprite: Sprite) {
     const sword = new Sword({
       attack: 5,
-      speed: 0.5,
+      speed: 0.002,
       sprite: sprite,
       x: 500,
       y: 500
