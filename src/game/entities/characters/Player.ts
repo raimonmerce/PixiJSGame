@@ -39,17 +39,6 @@ export class Player extends Character {
 
   update(delta: number): void {
     super.update(delta);
-
-    let newX = this.x;
-    let newY = this.y;
-
-    if (this.controller.isPressed('up')) newY -= this.speed * delta;
-    if (this.controller.isPressed('down')) newY += this.speed * delta;
-    if (this.controller.isPressed('left')) newX -= this.speed * delta;
-    if (this.controller.isPressed('right')) newX += this.speed * delta;
-
-    this.setPosition(newX, newY);
-
     this.weapon?.update(delta);
   }
 }

@@ -1,5 +1,5 @@
 import GameObject from "../../core/GameObject";
-import { HealthBar } from "../ui/HealthBar";
+import { HealthBar } from "../ui/healthBar";
 import type{ CharacterStats } from "../../../types";
 export default abstract class CharacterBase extends GameObject {
   health: number;

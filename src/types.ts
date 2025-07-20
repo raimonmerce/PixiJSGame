@@ -1,9 +1,9 @@
-import { Sprite, AnimatedSprite } from 'pixi.js';
+import { Sprite, AnimatedSprite, TilingSprite } from 'pixi.js';
 import type Controller from './game/core/Controller';
 
 export type Direction = 'up' | 'down' | 'left' | 'right';
 export interface GameObjectOptions {
-  sprite: Sprite | AnimatedSprite;
+  sprite: Sprite | AnimatedSprite | TilingSprite;
   x?: number;
   y?: number;
 }
@@ -24,5 +24,9 @@ export interface PlayerOptions extends CharacterStats {
 }
 
 export interface EnemyOptions extends CharacterStats {
+  name: string;
+}
+
+export interface FloorOptions extends GameObjectOptions {
   name: string;
 }

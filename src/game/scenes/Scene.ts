@@ -1,7 +1,8 @@
-import {  Container, Sprite, TilingSprite, Texture, AnimatedSprite } from 'pixi.js';
+import {  Container, Sprite, TilingSprite } from 'pixi.js';
 import { Player } from '../entities/characters/Player';
 import { Enemy } from '../entities/characters/Enemy';
 import { Sword } from '../entities/weapon/Sword';
+import { Floor } from '../entities/scenario/Floor';
 import { CharacterFactory } from '../entities/characters/CharacterFactory';
 import type WeaponBase from '../entities/weapon/WeaponBase';
 import type GameObject from '../core/GameObject';
@@ -13,6 +14,7 @@ export class Scene extends Container {
   private enemies: Enemy[] = [];
   private weapons: WeaponBase[] = [];
   private controller: Controller;
+  private floor: Floor;
 
   constructor(controller: Controller) {
     super();
@@ -24,24 +26,25 @@ export class Scene extends Container {
     try {
       const assetPaths = {
         player: "images/player/player.json",
-        enemy: "images/boom/boom.json",
+        enemy: "images/enemy/enemy.json",
         sword: "images/sword/sword.png",
         tile: "images/tile/tile.png",
       };
 
       await Loader.preloadGroup(assetPaths);
 
-      const [swordSprite, tileSprite, animatedGuy] = await Promise.all([
+      const [swordSprite, tileSprite, enemyAnimated] = await Promise.all([
         Loader.getSprite('sword'),
         Loader.getSprite('tile'),
-        Loader.getAnimatedSprite('boom')
+        Loader.getAnimatedSprite('enemy')
       ]);
 
-      if ( !swordSprite || !tileSprite || !animatedGuy) {
+      if ( !swordSprite || !tileSprite || !enemyAnimated) {
         throw new Error('Missing required sprites after loading.');
       }
       this.createFloor(tileSprite);
-      this.createEnemy(animatedGuy);
+      this.createEnemy(200, 300);
+      this.createEnemy(100, 400);
       this.createPlayer();
       this.createWeapon(swordSprite);
 
@@ -53,33 +56,28 @@ export class Scene extends Container {
   private async createPlayer() {
     try {
       this.player = await CharacterFactory.createDefaultPlayer(this.controller);
-      console.log("this.player", this.player)
       if (this.player) this.addChild(this.player.sprite);
+      else console.error("Failed to initialize player");
     } catch (error) {
       console.error("Failed to initialize scene", error);
     } 
   }
 
-  private createEnemy(sprite: Sprite| AnimatedSprite) {
-    sprite.width *= 2;
-    sprite.height *= 2;
-
-    const enemy = new Enemy({
-      name: "Carlos",
-      maxHealth: 50,
-      attack: 5,
-      speed: 0.5,
-      sprite: sprite,
-      x: 200,
-      y: 200
-    });
-    this.enemies.push(enemy);
-    this.addChild(enemy.sprite);
+  private async createEnemy(x = 0, y = 0) {
+    try {
+      const enemy = await CharacterFactory.createDefaultEnemy(x, y);
+      if (!enemy) {
+        console.error("Failed to initialize enemy");
+        return;
+      }
+      this.enemies.push(enemy);
+      this.addChild(enemy.sprite);
+    } catch (error) {
+      console.error("Failed to initialize scene", error);
+    }
   }
 
   private createWeapon(sprite: Sprite) {
-    sprite.width = sprite.width * 2;
-    sprite.height = sprite.height * 2;
     const sword = new Sword({
       attack: 5,
       speed: 0.5,
@@ -92,23 +90,35 @@ export class Scene extends Container {
   }
 
   private createFloor(sprite: Sprite) {
-    const tilingBackground = new TilingSprite(
-      sprite.texture,
-      window.innerWidth,
-      window.innerHeight
-    );
-
-    tilingBackground.position.set(0, 0);
-
-    this.addChild(tilingBackground);
+    const tileSprite = new TilingSprite({
+      texture: sprite.texture,
+      width: window.innerWidth,
+      height:  window.innerHeight
+    });
+    this.floor = new Floor({
+      name: "test",
+      sprite: tileSprite,
+      x: 0,
+      y: 0
+    });
+    this.addChild(this.floor.sprite);
   }
 
   update(delta: number): void {
+    if (!this.player) return;
     this.player?.update(delta);
+    let newX = this.x;
+    let newY = this.y;
 
+    if (this.controller.isPressed('up')) newY += this.player.speed * delta;
+    if (this.controller.isPressed('down')) newY -= this.player.speed * delta;
+    if (this.controller.isPressed('left')) newX += this.player.speed * delta;
+    if (this.controller.isPressed('right')) newX -= this.player.speed * delta;
+
+    this.floor.addPosition(newX, newY)
     for (let i = this.enemies.length - 1; i >= 0; i--) {
       const enemy = this.enemies[i];
-
+      
       if (this.player && this.checkCollision(this.player, enemy)) {
         if(this.player.hasWeapon()) enemy.takeDamage(1)
         else this.player.takeDamage(1);
@@ -118,6 +128,8 @@ export class Scene extends Container {
         this.enemies.splice(i, 1);
         enemy.destroy();
       }
+      enemy.addPosition(newX, newY)
+      enemy.update(delta)
     }
 
     for (const weapon of this.weapons) {
@@ -125,6 +137,8 @@ export class Scene extends Container {
       if (this.player && !weapon.attached && this.checkCollision(this.player, weapon)) {
         this.player.equipWeapon(weapon);
       }
+
+      if (!weapon.attached) weapon.addPosition(newX, newY)
     }
   }
 

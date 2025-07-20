@@ -1,7 +1,7 @@
-import { AnimatedSprite, Sprite } from 'pixi.js';
+import { AnimatedSprite, Sprite, TilingSprite } from 'pixi.js';
 import type { GameObjectOptions } from '../../types';
 export default abstract class GameObject {
-  sprite: Sprite | AnimatedSprite;
+  sprite: Sprite | AnimatedSprite | TilingSprite;
   private _x: number;
   private _y: number;
 
@@ -40,6 +40,13 @@ export default abstract class GameObject {
     this._y = y;
     this.sprite.x = x;
     this.sprite.y = y;
+  }
+
+  addPosition(x: number, y: number): void {
+    this._x += x;
+    this._y += y;
+    this.sprite.x += x;
+    this.sprite.y += y;
   }
 
   destroy(): void {
