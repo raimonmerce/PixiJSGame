@@ -8,17 +8,19 @@ import type WeaponBase from '../entities/weapon/WeaponBase';
 import type GameObject from '../core/GameObject';
 import Controller from '../core/Controller';
 import Loader from '../core/Loader';
-
+import type { GameProps } from '../../types';
 export class Scene extends Container {
   private player?: Player;
   private enemies: Enemy[] = [];
   private weapons: WeaponBase[] = [];
   private controller: Controller;
-  private floor: Floor;
+  private floor?: Floor;
+  private gameProps: GameProps;
 
-  constructor(controller: Controller) {
+  constructor(controller: Controller, gameProps: GameProps) {
     super();
-    this.controller = controller
+    this.controller = controller;
+    this.gameProps = gameProps;
     this.init();
   }
 
@@ -159,7 +161,7 @@ export class Scene extends Container {
     newX += dx * this.player.speed * delta;
     newY += dy * this.player.speed * delta;
 
-    this.floor.addPosition(newX, newY)
+    this.floor?.addPosition(newX, newY)
     for (let i = this.enemies.length - 1; i >= 0; i--) {
       const enemy = this.enemies[i];
       
@@ -170,6 +172,7 @@ export class Scene extends Container {
 
       if (!enemy.isAlive()) {
         this.enemies.splice(i, 1);
+        this.gameProps.setScore(this.gameProps.score += enemy.score);
         enemy.destroy();
       } else {
         enemy.addPosition(newX, newY)

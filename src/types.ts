@@ -9,8 +9,8 @@ export interface GameObjectOptions {
 }
 
 export interface WeaponOptions extends GameObjectOptions {
-    attack: number,
-    speed: number,
+  attack: number,
+  speed: number,
 }
 
 export interface CharacterStats extends GameObjectOptions {
@@ -24,9 +24,14 @@ export interface PlayerOptions extends CharacterStats {
 }
 
 export interface EnemyOptions extends CharacterStats {
-  name: string;
+  score: number;
 }
 
 export interface FloorOptions extends GameObjectOptions {
   name: string;
+}
+
+export interface GameProps {
+  score: number;
+  setScore: (score: number) => void;
 }

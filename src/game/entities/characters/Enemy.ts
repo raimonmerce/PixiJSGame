@@ -1,11 +1,11 @@
 import Character from "./CharacterBase";
 import type { EnemyOptions } from "../../../types";
 export class Enemy extends Character {
-  name: string;
+  score: number;
 
-  constructor({ name, ...characterStats }: EnemyOptions) {
+  constructor({ score, ...characterStats }: EnemyOptions) {
     super(characterStats);
-    this.name = name;
+    this.score = score;
   }
 
 update(delta: number): void {
