@@ -22,19 +22,19 @@ export class Scene extends Container {
   private async init() {
     try {
       const assetPaths = {
-        player: "images/player.json",
-        enemy: "images/enemy.png",
-        sword: "images/sword.png",
-        tile: "images/tile.png",
-        guy: "images/guy.json"
+        player: "images/player/player.json",
+        enemy: "images/boom/boom.json",
+        sword: "images/sword/sword.png",
+        tile: "images/tile/tile.png",
       };
+
       await Loader.preloadGroup(assetPaths);
 
       const [playerSprite, swordSprite, tileSprite, animatedGuy] = await Promise.all([
         Loader.getAnimatedSprite('player'),
         Loader.getSprite('sword'),
         Loader.getSprite('tile'),
-        Loader.getAnimatedSprite('guy')
+        Loader.getAnimatedSprite('boom')
       ]);
 
       if (!playerSprite || !swordSprite || !tileSprite || !animatedGuy) {

@@ -53,7 +53,7 @@ export default class Loader {
       return new Sprite(this.textures.get(key)!);
     }
 
-    const path = `images/${key}.png`;
+    const path = `images/${key}/${key}.png`;
     try {
       const texture = await Assets.load(path);
       this.textures.set(key, texture);
@@ -70,7 +70,7 @@ export default class Loader {
       return this.animations.get(key);
     }
 
-    const path = `images/${key}.json`;
+    const path = `images/${key}/${key}.json`;
     try {
       const sheet: Spritesheet = await Assets.load(path);
       const frames: Texture[] = Object.values(sheet.textures);
