@@ -127,9 +127,10 @@ export class Scene extends Container {
       if (!enemy.isAlive()) {
         this.enemies.splice(i, 1);
         enemy.destroy();
+      } else {
+        enemy.addPosition(newX, newY)
+        enemy.update(delta)
       }
-      enemy.addPosition(newX, newY)
-      enemy.update(delta)
     }
 
     for (const weapon of this.weapons) {
