@@ -1,62 +1,83 @@
 import { Assets, Texture, Sprite, Spritesheet, AnimatedSprite } from 'pixi.js';
-
 export default class Loader {
   private static textures: Map<string, Texture> = new Map();
-  private static animatedSprite: AnimatedSprite;
-
-  // Define all asset paths here
-  private static assetPaths: string[] = [
-    "images/player.png",
-    "images/enemy.png",
-    "images/sword.png",
-    "images/tile.png",
-  ];
-
-  static async preloadAll(): Promise<void> {
+  private static animations: Map<string, AnimatedSprite> = new Map();
+  private static assetPaths: Map<string, string> = new Map();
+  static async preloadGroup(assetPaths: Record<string, string>): Promise<void> {
     try {
-      const loadedTextures = await Promise.all(
-        this.assetPaths.map(path => Assets.load(path))
+      this.assetPaths = new Map(Object.entries(assetPaths));
+      const assetEntries = Object.entries(assetPaths).filter(
+        ([_, value]) => value.includes(".png")
       );
+      const textures = await Promise.all(assetEntries.map(([_, path]) => Assets.load(path)));
 
-      loadedTextures.forEach((texture, i) => {
-        this.textures.set(this.assetPaths[i], texture);
+      assetEntries.forEach(([key, path], index) => {
+        this.textures.set(key, textures[index]);
       });
-      this.preLoadSpritesheet()
-
+      await this.loadSpritesheet();
     } catch (error) {
       console.error("Error loading assets", error);
       throw error;
     }
   }
 
-  static async preLoadSpritesheet(): Promise<AnimatedSprite> {
+  private static async loadSpritesheet(): Promise<void> {
     try {
-      const spritesheet: Spritesheet = await Assets.load('https://pixijs.com/assets/spritesheet/0123456789.json');
-      const texturesSpritesheet = [];
+      const jsonEntries = Array.from(this.assetPaths.entries()).filter(
+        ([, value]) => value.endsWith(".json")
+      );
 
-      for (let i = 0; i < 10; i++) {
-        const framekey = `0123456789 ${i}.ase`;
-        const texture = Texture.from(framekey);
-        texturesSpritesheet.push(texture);
+      for (const [key, path] of jsonEntries) {
+        const sheet: Spritesheet = await Assets.load(path);
+        const frames: Texture[] = [];
+
+        for (const [frameKey, texture] of Object.entries(sheet.textures)) {
+          frames.push(texture);
+        }
+
+        const anim = new AnimatedSprite(frames);
+        anim.animationSpeed = 0.1;
+        anim.loop = true;
+        anim.play();
+
+        this.animations.set(key, anim);
       }
-
-      this.animatedSprite = new AnimatedSprite(texturesSpritesheet);
-      this.animatedSprite.animationSpeed = 1 / 10;
-      this.animatedSprite.loop = true;
-      this.animatedSprite.play();
-
-      return this.animatedSprite;
     } catch (error) {
-      console.error("Error loading spritesheet", error);
+      console.error("Error loading spritesheet(s):", error);
       throw error;
     }
   }
 
-  static getTexture(path: string): Sprite | undefined {
-    return new Sprite(this.textures.get(path));
+  static getTexture(key: string): Sprite | undefined {
+    const texture = this.textures.get(key);
+    return texture ? new Sprite(texture) : undefined;
   }
 
-  static getAnimatedSprite(): AnimatedSprite | undefined{
-    return this.animatedSprite;
+  static getAnimatedSprite(key: string): AnimatedSprite | undefined {
+    return this.animations.get(key);
+  }
+
+  static unloadAsset(key: string): void {
+    if (this.textures.has(key)) {
+      const texture = this.textures.get(key);
+      texture?.destroy(true);
+      this.textures.delete(key);
+      console.log(`Texture ${key} unloaded`);
+    }
+
+    if (this.animations.has(key)) {
+      const anim = this.animations.get(key);
+      //anim?.destroy({ children: true, texture: true, baseTexture: true });
+      anim?.destroy();
+      this.animations.delete(key);
+      console.log(`AnimatedSprite ${key} unloaded`);
+    }
+
+    const path = this.assetPaths.get(key);
+    if (path) {
+      Assets.unload(path);
+      this.assetPaths.delete(key);
+      console.log(`Path ${path} removed from assetPaths`);
+    }
   }
 }

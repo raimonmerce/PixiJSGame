@@ -23,15 +23,23 @@ export class Scene extends Container {
 
   private async init() {
     try {
-      await Loader.preloadAll();
+      const assetPaths = {
+        player: "images/player.png",
+        enemy: "images/enemy.png",
+        sword: "images/sword.png",
+        tile: "images/tile.png",
+        guy: "images/guy.json"
+      };
+      await Loader.preloadGroup(assetPaths);
 
-      const playerTexture = Loader.getTexture("images/player.png");
-      const enemyTexture = Loader.getTexture("images/enemy.png");
-      const swordTexture = Loader.getTexture("images/sword.png");
-      const tileTexture = Loader.getTexture("images/tile.png");
-      const animatedSpriteSheet = await Loader.preLoadSpritesheet();
-
-      if (!playerTexture || !enemyTexture || !swordTexture || !tileTexture) {
+      const playerTexture = Loader.getTexture("player");
+      const enemyTexture = Loader.getTexture("enemy");
+      const swordTexture = Loader.getTexture("sword");
+      const tileTexture = Loader.getTexture("tile");
+      const animatedSpriteSheet = await Loader.getAnimatedSprite("guy");
+      
+      if (!playerTexture || !enemyTexture || !swordTexture || !tileTexture || !animatedSpriteSheet) {
+        console.log("Error", playerTexture, enemyTexture, swordTexture, tileTexture, animatedSpriteSheet)
         throw new Error("Missing textures after preload");
       }
       this.createFloor(tileTexture);
