@@ -48,13 +48,45 @@ export default class Loader {
     }
   }
 
-  static getTexture(key: string): Sprite | undefined {
-    const texture = this.textures.get(key);
-    return texture ? new Sprite(texture) : undefined;
+  static async getSprite(key: string): Promise<Sprite | undefined> {
+    if (this.textures.has(key)) {
+      return new Sprite(this.textures.get(key)!);
+    }
+
+    const path = `images/${key}.png`;
+    try {
+      const texture = await Assets.load(path);
+      this.textures.set(key, texture);
+      this.assetPaths.set(key, path);
+      return new Sprite(texture);
+    } catch (error) {
+      console.warn(`Texture not found for key: ${key}`, error);
+      return undefined;
+    }
   }
 
-  static getAnimatedSprite(key: string): AnimatedSprite | undefined {
-    return this.animations.get(key);
+  static async getAnimatedSprite(key: string): Promise<AnimatedSprite | undefined> {
+    if (this.animations.has(key)) {
+      return this.animations.get(key);
+    }
+
+    const path = `images/${key}.json`;
+    try {
+      const sheet: Spritesheet = await Assets.load(path);
+      const frames: Texture[] = Object.values(sheet.textures);
+
+      const anim = new AnimatedSprite(frames);
+      anim.animationSpeed = 0.1;
+      anim.loop = true;
+      anim.play();
+
+      this.animations.set(key, anim);
+      this.assetPaths.set(key, path);
+      return anim;
+    } catch (error) {
+      console.warn(`AnimatedSprite not found for key: ${key}`, error);
+      return undefined;
+    }
   }
 
   static unloadAsset(key: string): void {

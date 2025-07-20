@@ -32,10 +32,10 @@ export class Scene extends Container {
       };
       await Loader.preloadGroup(assetPaths);
 
-      const playerTexture = Loader.getTexture("player");
-      const enemyTexture = Loader.getTexture("enemy");
-      const swordTexture = Loader.getTexture("sword");
-      const tileTexture = Loader.getTexture("tile");
+      const playerTexture = await Loader.getSprite("player");
+      const enemyTexture = await Loader.getSprite("enemy");
+      const swordTexture = await Loader.getSprite("sword");
+      const tileTexture = await Loader.getSprite("tile");
       const animatedSpriteSheet = await Loader.getAnimatedSprite("guy");
       
       if (!playerTexture || !enemyTexture || !swordTexture || !tileTexture || !animatedSpriteSheet) {
