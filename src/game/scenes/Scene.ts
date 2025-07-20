@@ -2,6 +2,7 @@ import {  Container, Sprite, TilingSprite, Texture, AnimatedSprite } from 'pixi.
 import { Player } from '../entities/characters/Player';
 import { Enemy } from '../entities/characters/Enemy';
 import { Sword } from '../entities/weapon/Sword';
+import { CharacterFactory } from '../entities/characters/CharacterFactory';
 import type WeaponBase from '../entities/weapon/WeaponBase';
 import type GameObject from '../core/GameObject';
 import Controller from '../core/Controller';
@@ -30,19 +31,18 @@ export class Scene extends Container {
 
       await Loader.preloadGroup(assetPaths);
 
-      const [playerSprite, swordSprite, tileSprite, animatedGuy] = await Promise.all([
-        Loader.getAnimatedSprite('player'),
+      const [swordSprite, tileSprite, animatedGuy] = await Promise.all([
         Loader.getSprite('sword'),
         Loader.getSprite('tile'),
         Loader.getAnimatedSprite('boom')
       ]);
 
-      if (!playerSprite || !swordSprite || !tileSprite || !animatedGuy) {
+      if ( !swordSprite || !tileSprite || !animatedGuy) {
         throw new Error('Missing required sprites after loading.');
       }
       this.createFloor(tileSprite);
       this.createEnemy(animatedGuy);
-      this.createPlayer(playerSprite);
+      this.createPlayer();
       this.createWeapon(swordSprite);
 
     } catch (error) {
@@ -50,20 +50,14 @@ export class Scene extends Container {
     }
   }
 
-  private createPlayer(sprite: Sprite| AnimatedSprite) {
-    sprite.width = sprite.width * 2;
-    sprite.height = sprite.height * 2;
-
-    this.player = new Player({
-      controller: this.controller,
-      maxHealth: 50,
-      attack: 5,
-      speed: 0.5,
-      sprite: sprite,
-      x: 400,
-      y: 200
-    });
-    this.addChild(this.player.sprite);
+  private async createPlayer() {
+    try {
+      this.player = await CharacterFactory.createDefaultPlayer(this.controller);
+      console.log("this.player", this.player)
+      if (this.player) this.addChild(this.player.sprite);
+    } catch (error) {
+      console.error("Failed to initialize scene", error);
+    } 
   }
 
   private createEnemy(sprite: Sprite| AnimatedSprite) {
