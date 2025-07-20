@@ -1,20 +1,13 @@
 import GameObject from "../../core/GameObject";
-import { AnimatedSprite, Sprite } from 'pixi.js';
-
+import type { WeaponOptions } from "../../../types";
 export default abstract class WeaponBase extends GameObject {
   abstract name: string;
   attack: number;
   speed: number;
   attached: boolean;
 
-  constructor(
-    sprite: Sprite | AnimatedSprite,
-    attack: number,
-    speed: number,
-    x = 0,
-    y = 0
-  ) {
-    super(sprite, x, y);
+  constructor({attack, speed, ...gameObjectStats}: WeaponOptions) {
+    super(gameObjectStats);
     this.attack = attack;
     this.speed = speed;
     this.attached = false;

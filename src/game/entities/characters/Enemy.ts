@@ -1,10 +1,10 @@
 import Character from "./CharacterBase";
-import { AnimatedSprite, Sprite } from 'pixi.js';
+import type { EnemyOptions } from "../../../types";
 export class Enemy extends Character {
   name: string;
 
-  constructor(sprite: Sprite | AnimatedSprite, x = 0, y = 0, name: string) {
-    super(sprite, 100, 5, 0.3, x, y);
+  constructor({ name, ...characterStats }: EnemyOptions) {
+    super(characterStats);
     this.name = name;
   }
 

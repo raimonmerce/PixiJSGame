@@ -1,6 +1,6 @@
 import GameObject from "../../core/GameObject";
-import { AnimatedSprite, Sprite } from 'pixi.js';
 import { HealthBar } from "../ui/healthBar";
+import type{ CharacterStats } from "../../../types";
 export default abstract class CharacterBase extends GameObject {
   health: number;
   maxHealth: number;
@@ -8,20 +8,13 @@ export default abstract class CharacterBase extends GameObject {
   speed: number;
   healthBar: HealthBar;
 
-  constructor(
-    sprite: Sprite | AnimatedSprite,
-    health: number,
-    attack: number,
-    speed: number,
-    x = 0,
-    y = 0
-  ) {
-    super(sprite, x, y);
-    this.health = health;
-    this.maxHealth = health;
+  constructor({maxHealth, attack, speed, ...gameObjectStats }: CharacterStats) {
+    super(gameObjectStats);
+    this.health = maxHealth;
+    this.maxHealth = maxHealth;
     this.attack = attack;
     this.speed = speed;
-    this.healthBar = new HealthBar(health);
+    this.healthBar = new HealthBar(maxHealth);
     this.sprite.addChild(this.healthBar);
   }
 

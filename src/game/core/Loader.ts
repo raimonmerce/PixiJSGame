@@ -11,7 +11,7 @@ export default class Loader {
       );
       const textures = await Promise.all(assetEntries.map(([_, path]) => Assets.load(path)));
 
-      assetEntries.forEach(([key, path], index) => {
+      assetEntries.forEach(([key, _], index) => {
         this.textures.set(key, textures[index]);
       });
       await this.loadSpritesheet();
@@ -31,7 +31,7 @@ export default class Loader {
         const sheet: Spritesheet = await Assets.load(path);
         const frames: Texture[] = [];
 
-        for (const [frameKey, texture] of Object.entries(sheet.textures)) {
+        for (const [_, texture] of Object.entries(sheet.textures)) {
           frames.push(texture);
         }
 

@@ -1,20 +1,12 @@
 import WeaponBase from "./WeaponBase";
-import { Sprite } from 'pixi.js';
+import type { WeaponOptions } from "../../../types";
 
 export class Sword extends WeaponBase {
-    durability: number;
+    durability: number = 100;
     name = 'Sword';
 
-    constructor(
-        sprite: Sprite,
-        x = 0,
-        y = 0,
-        attack: number = 10,
-        speed: number = 5,
-        durability: number = 100
-    ) {
-        super(sprite, attack, speed, x, y);
-        this.durability = durability;
+    constructor({...weaponOptions}: WeaponOptions) {
+        super(weaponOptions);
     }
 
     attachedWeapon(): void {

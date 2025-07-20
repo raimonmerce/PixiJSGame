@@ -1,10 +1,11 @@
 import { AnimatedSprite, Sprite } from 'pixi.js';
+import type { GameObjectOptions } from '../../types';
 export default abstract class GameObject {
   sprite: Sprite | AnimatedSprite;
   private _x: number;
   private _y: number;
 
-  constructor(sprite: Sprite | AnimatedSprite, x = 0, y = 0) {
+  constructor({sprite, x = 0, y = 0}: GameObjectOptions) {
     this.sprite = sprite;
     this._x = x;
     this._y = y;

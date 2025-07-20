@@ -1,14 +1,13 @@
 import Character from "./CharacterBase";
-import { AnimatedSprite, Sprite } from 'pixi.js';
 import type Controller from '../../core/Controller';
 import WeaponBase from "../weapon/WeaponBase";
-
+import type{ PlayerOptions } from "../../../types";
 export class Player extends Character {
   controller: Controller;
   private weapon?: WeaponBase;
   
-  constructor(sprite: Sprite | AnimatedSprite, controller: Controller, x = 0, y = 0) {
-    super(sprite, 100, 5, 0.5, x, y);
+  constructor({ controller, ...characterStats }: PlayerOptions) {
+    super(characterStats);
     this.controller = controller;
   }
 
