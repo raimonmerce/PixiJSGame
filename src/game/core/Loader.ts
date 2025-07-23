@@ -90,14 +90,14 @@ export default class Loader {
       this.textures.delete(key);
       console.log(`Texture ${key} unloaded`);
     }
-
-    if (this.animations.has(key)) {
-      const anim = this.animations.get(key);
-      //anim?.destroy({ children: true, texture: true, baseTexture: true });
-      anim?.destroy();
-      this.animations.delete(key);
-      console.log(`AnimatedSprite ${key} unloaded`);
-    }
+    //TODO: Fix delete animation sprite
+    // if (this.animations.has(key)) {
+    //   const anim = this.animations.get(key);
+    //   //anim?.destroy({ children: true, texture: true, baseTexture: true });
+    //   anim?.destroy();
+    //   this.animations.delete(key);
+    //   console.log(`AnimatedSprite ${key} unloaded`);
+    // }
 
     const path = this.assetPaths.get(key);
     if (path) {

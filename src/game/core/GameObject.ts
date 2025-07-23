@@ -19,7 +19,7 @@ export default abstract class GameObject {
     sprite.y = y;
   }
 
-  update(delta: number): void {
+  update(_delta: number): void {
     
   }
 
