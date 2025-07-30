@@ -15,6 +15,8 @@ export class CharacterFactory {
 
             const centerX = window.innerWidth / 2;
             const centerY = window.innerHeight / 2;
+            // const centerX = 360 / 2;
+            // const centerY = 360 / 2;
 
             return new Player({
                 controller: controller,

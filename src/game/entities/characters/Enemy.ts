@@ -13,6 +13,8 @@ update(delta: number): void {
 
   const centerX = window.innerWidth / 2;
   const centerY = window.innerHeight / 2;
+  // const centerX = 360 / 2;
+  // const centerY = 360 / 2;
 
   const dirX = centerX - this.x;
   const dirY = centerY - this.y;

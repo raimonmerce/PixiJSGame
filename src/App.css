@@ -9,12 +9,104 @@ html,
 body {
   overflow: hidden;
   font-family: 'Alagard', sans-serif;
+  width: 100vw;
+  height: 100vh;
+  color: white;
+  margin: 0px;
 }
 
-.test {
+.gameCanvas {
+  /* height: 360px;
+  width: 360px; */
   height: 100%;
   width: 100%;
   overflow: hidden;
   scrollbar-width: none;
   -ms-overflow-style: none;
+}
+
+.mainApp {
+  background-color: black;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.scoreGame {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+
+button {
+  background-color: black;
+  color: white;
+  font-family: 'Alagard', sans-serif;
+  padding: 8px 16px;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  font-size: 32px;
+  text-transform: uppercase;
+  box-shadow:
+    0 0 0 2px white,
+    8px 8px 0 0 white,
+    8px 8px 0 2px black; 
+}
+
+button:hover {
+  background-color: #444;
+  box-shadow:
+  0 0 0 2px white,
+  4px 4px 0 0 white,
+  4px 4px 0 2px black; 
+}
+
+.main-menu {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: black;
+}
+
+h1 {
+  font-size: 128px;
+}
+
+h2 {
+  font-size: 64px;
+}
+
+h3 {
+  font-size: 32px;
+}
+
+.credits-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.credits-list a {
+  color: white;
+  text-decoration: none;
+  font-size: 32px;
+  padding: 0.25rem;
+  text-align: center;
+}
+
+.credits-list a:hover {
+  color: #444;
+}
+
+.menu-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
 }

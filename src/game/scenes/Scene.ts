@@ -167,7 +167,8 @@ export class Scene extends Container {
       
       if (this.player) {
         if (this.checkCollision(this.player, enemy)) {
-          this.player.takeDamage(1);
+          this.player.takeDamage(0.5);
+          // if (!this.player.isAlive()) this.gameProps.setScreen("gameover")
         }
       }
 
