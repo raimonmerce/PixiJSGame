@@ -10,7 +10,7 @@ export default function GameCanvas({ score, setScore, setScreen }: GameProps) {
   useEffect(() => {
     if (!initializedRef.current && containerRef.current) {
       initializedRef.current = true;
-
+      setScore(0);
       const game = new Game({ score, setScore, setScreen });
       game.init(containerRef.current);
       gameInstanceRef.current = game;

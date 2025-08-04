@@ -9,6 +9,7 @@ import type GameObject from '../core/GameObject';
 import Controller from '../core/Controller';
 import Loader from '../core/Loader';
 import type { GameProps } from '../../types';
+import Leaderboard from "../leaderboard/Leaderboard";
 export class Scene extends Container {
   private player?: Player;
   private enemies: Enemy[] = [];
@@ -16,11 +17,13 @@ export class Scene extends Container {
   private controller: Controller;
   private floor?: Floor;
   private gameProps: GameProps;
+  private running  = false;
 
   constructor(controller: Controller, gameProps: GameProps) {
     super();
     this.controller = controller;
     this.gameProps = gameProps;
+    this.running = true;
     this.init();
   }
 
@@ -137,7 +140,7 @@ export class Scene extends Container {
   }
 
   update(delta: number): void {
-    if (!this.player) return;
+    if (!this.player || !this.running) return;
     this.player?.update(delta);
 
     let newX = this.x;
@@ -168,7 +171,7 @@ export class Scene extends Container {
       if (this.player) {
         if (this.checkCollision(this.player, enemy)) {
           this.player.takeDamage(0.5);
-          // if (!this.player.isAlive()) this.gameProps.setScreen("gameover")
+          if (!this.player.isAlive()) this.playerDies();
         }
       }
 
@@ -196,6 +199,11 @@ export class Scene extends Container {
 
       if (!weapon.attached) weapon.addPosition(newX, newY);
     }
+  }
+
+  private playerDies(){
+    this.gameProps.setScreen("gameover")
+    this.running = false;
   }
 
   private getSpriteGlobalBoundsWithoutChildren(sprite: Sprite | AnimatedSprite | TilingSprite): Rectangle {

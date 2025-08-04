@@ -42,7 +42,7 @@ export class CharacterFactory {
                 return undefined;
             }
             return new Enemy({
-                score: 10,
+                score: 100, //10
                 maxHealth: 50,
                 attack: 5,
                 speed: 0.15,

@@ -2,6 +2,8 @@ import { Sprite, AnimatedSprite, TilingSprite } from 'pixi.js';
 import type Controller from './game/core/Controller';
 export type ScreenType = 'menu' | 'game' | 'options' | 'credits' | 'leaderboard' | 'gameover';
 export type Direction = 'up' | 'down' | 'left' | 'right';
+export type TimeRange = 'day' | 'week' | 'month' | 'year' | 'forever';
+//Game Types
 export interface GameObjectOptions {
   sprite: Sprite | AnimatedSprite | TilingSprite;
   x?: number;
@@ -31,6 +33,13 @@ export interface FloorOptions extends GameObjectOptions {
   name: string;
 }
 
+export interface ScoreEntry {
+  username: string;
+  score: number;
+  timestamp: string;
+}
+
+//Props for React
 export interface MainMenuProps {
   setScreen: (screen: ScreenType) => void;
 }

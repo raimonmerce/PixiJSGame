@@ -110,3 +110,49 @@ h3 {
   flex-direction: column;
   gap: 2rem;
 }
+
+.initials-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.initials-label {
+  display: block;
+  font-size: 32px;
+  font-family: 'Alagard', sans-serif;
+  color: white;
+  margin-bottom: 8px;
+}
+
+.initials-input {
+  background-color: black;
+  color: white;
+  font-family: 'Alagard', sans-serif;
+  font-size: 32px;
+  padding: 8px 16px;
+  border: none;
+  text-transform: uppercase;
+  box-shadow:
+    0 0 0 2px white;
+  width: 100px;
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.initials-input:focus {
+  outline: none;
+}
+
+.initials-input::placeholder {
+  color: #ccc;
+}
+
+.initials-input:hover {
+  background-color: #444;
+}
+
+.leaderList {
+  font-size: 32px;
+}
