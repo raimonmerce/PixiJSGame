@@ -1,7 +1,7 @@
 import type { ScoreEntry, TimeRange } from "../../types";
 
 export default class LeaderboardService {
-  private static baseUrl = 'https://your.api/leaderboard'; // Replace with actual endpoint
+  private static baseUrl = 'http://localhost:3000/leaderboard';
 
   static async getTopScores(limit: number = 10): Promise<ScoreEntry[]> {
     const response = await fetch(`${this.baseUrl}/top?limit=${limit}`);
@@ -22,6 +22,7 @@ export default class LeaderboardService {
   }
 
   static async addScore(username: string, score: number): Promise<void> {
+    console.log(`${this.baseUrl}/add`, this.baseUrl)
     const response = await fetch(`${this.baseUrl}/add`, {
       method: 'POST',
       headers: {

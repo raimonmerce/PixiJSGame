@@ -4,16 +4,9 @@ import MockLeaderboardService from "./MockLeaderboardService";
 import type { ScoreEntry, TimeRange } from "../../types";
 
 // Set this to false to use the mock version
-const USE_API = false;
+const USE_API = false; //Set to false if not API, true if API
 
-const Service = USE_API
-  ? {
-      getTopScores: RealLeaderboardService.getTopScores,
-      getLastScores: RealLeaderboardService.getLastScores,
-      getTopScoresByRange: RealLeaderboardService.getTopScoresByRange,
-      addScore: RealLeaderboardService.addScore,
-    }
-  : MockLeaderboardService;
+const Service = USE_API ? RealLeaderboardService : MockLeaderboardService;
 
 export default class Leaderboard {
   static getTopScores(limit: number = 10): Promise<ScoreEntry[]> {
