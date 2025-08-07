@@ -10,6 +10,8 @@ import Controller from '../core/Controller';
 import Loader from '../core/Loader';
 import type { GameProps } from '../../types';
 import Leaderboard from "../leaderboard/Leaderboard";
+import { sound } from '@pixi/sound';
+
 export class Scene extends Container {
   private player?: Player;
   private enemies: Enemy[] = [];
@@ -31,6 +33,7 @@ export class Scene extends Container {
     try {
       const assetPaths = {
         player: "images/player/player.json",
+        // player: "images/lazarus/lazarus.json",
         enemy: "images/enemy/enemy.json",
         sword: "images/sword/sword.png",
         tile: "images/tile/tile.png",
@@ -51,6 +54,7 @@ export class Scene extends Container {
       this.createPlayer();
       this.createWeapon(swordSprite);
       this.startEnemySpawn();
+      this.createSFX();
 
     } catch (error) {
       console.error("Failed to initialize scene", error);
@@ -171,6 +175,7 @@ export class Scene extends Container {
       if (this.player) {
         if (this.checkCollision(this.player, enemy)) {
           this.player.takeDamage(0.5);
+          // sound.play('hurt');
           if (!this.player.isAlive()) this.playerDies();
         }
       }
@@ -226,7 +231,6 @@ export class Scene extends Container {
     );
   }
 
-
   private checkCollision(obj1: GameObject, obj2: GameObject): boolean {
     const bounds1 = this.getSpriteGlobalBoundsWithoutChildren(obj1.sprite);
     const bounds2 = this.getSpriteGlobalBoundsWithoutChildren(obj2.sprite);
@@ -235,5 +239,9 @@ export class Scene extends Container {
       bounds1.x + bounds1.width > bounds2.x &&
       bounds1.y < bounds2.y + bounds2.height &&
       bounds1.y + bounds1.height > bounds2.y;
+  }
+
+  private createSFX() {
+    sound.add('hurt', 'sfx/hurt.wav');
   }
 }
