@@ -9,7 +9,7 @@ import type GameObject from '../core/GameObject';
 import Controller from '../core/Controller';
 import Loader from '../core/Loader';
 import type { GameProps } from '../../types';
-import Leaderboard from "../leaderboard/Leaderboard";
+// import Leaderboard from "../leaderboard/Leaderboard";
 export class Scene extends Container {
   private player?: Player;
   private enemies: Enemy[] = [];

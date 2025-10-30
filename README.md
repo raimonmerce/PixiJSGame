@@ -1,69 +1,49 @@
-# React + TypeScript + Vite
+# PixiJS Game
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+[Play Online](https://raimonmerce.github.io/PixiJSGame)
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Overview
 
-## Expanding the ESLint configuration
+**PixiJS Game** is a fast-paced 2D survival game built with **React**, **Vite**, **TypeScript**, and **PixiJS**. Your goal is simple: **survive waves of monsters using your sword**. The hordes keep coming—how long can you last?
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+---
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Gameplay
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+- **Objective:** Defeat monsters and survive as long as possible.
+- **Controls:**
+  - **Move:** Arrow keys or `W`, `A`, `S`, `D`
+- Dodge, attack, and try to stay alive against increasingly challenging waves.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+---
+
+## Tech Stack
+
+- **React 19** – for UI components
+- **PixiJS 8** – for high-performance 2D rendering
+- **TypeScript** – type-safe development
+- **Vite** – lightning-fast development server and build tool
+- **ESLint** – code quality and formatting
+
+---
+
+## Installation
+
+Clone the repository and install dependencies:
+
+```bash
+git clone https://github.com/raimonmerce/PixiJSGame.git
+cd PixiJSGame
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Credits
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+Special thanks to the amazing contributors:
+- [Ray](https://github.com/raimonmerce)
+- [Vespi](https://www.instagram.com/vampirozombi/)
+- [Ji](https://www.linkedin.com/in/jun-jie-ji-chen/)
+- [Lluc](https://www.artstation.com/lluc_baliarda)
